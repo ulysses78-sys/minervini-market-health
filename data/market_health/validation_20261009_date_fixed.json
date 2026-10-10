@@ -1,0 +1,52 @@
+{
+  "source_export": "market_health_daily_20261009T093844Z.csv",
+  "price_source": "yfinance",
+  "universe_source": "github_datasets",
+  "universe_version": "current_sp500_503_survivorship_bias",
+  "original_engine": "0.3",
+  "fixed_engine": "0.3.1",
+  "repair": "All date labels shifted +1 calendar day to reverse confirmed naive-midnight UTC to New York conversion. Metrics were not recalculated.",
+  "rows": 60,
+  "columns": [
+    "date",
+    "collected_at",
+    "regime",
+    "score",
+    "coverage_pct",
+    "breadth50",
+    "breadth200",
+    "leadership_health",
+    "breakout_success_rate",
+    "breakout_event_count",
+    "distribution_count",
+    "warning_flags",
+    "price_source",
+    "universe_source",
+    "universe_version",
+    "universe_total",
+    "universe_covered",
+    "breadth_eligible",
+    "leadership_eligible",
+    "trend_score",
+    "breadth_score",
+    "leadership_score",
+    "breakout_score",
+    "pressure_score",
+    "engine_version",
+    "date_convention"
+  ],
+  "first_session": "2026-07-16",
+  "last_session": "2026-10-08",
+  "source_sha256": "fb763255372a617da1b053c5c6eefb559dcbd2b55428825dc20f5185c590140b",
+  "snapshot_sha256": "b2addd0505ddf34a2f87bcc74f02b669dd932ddefa1a821a35b86fc0f6d1703f",
+  "limitations": [
+    "Current constituents: survivorship bias, not point-in-time backtest.",
+    "Coverage_pct measures available score components, not universe price coverage.",
+    "Date-label repair from existing aggregate, not a fresh price download."
+  ],
+  "calendar_validation": {
+    "calendar": "XNYS",
+    "exact_contiguous_match": true,
+    "session_count": 60
+  }
+}
