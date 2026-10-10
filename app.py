@@ -17,6 +17,9 @@ def normalize(frames):
     required={'date','coverage_pct','score','regime','universe_version'}
     if missing:=required.difference(audit.columns):raise ValueError('Campos ausentes: '+', '.join(sorted(missing)))
     audit['date']=pd.to_datetime(audit['date'],errors='coerce')
+    current=audit['universe_version'].fillna('').astype(str).str.startswith('current_sp500_')
+    if audit.loc[current,'date'].isna().any() or (audit.loc[current,'date'].dt.dayofweek>=5).any():
+        raise ValueError('Histórico S&P 500 com datas inválidas ou de fim de semana; use o exportador v0.3.1.')
     audit['collected_at']=pd.to_datetime(audit.get('collected_at',pd.Series(index=audit.index,dtype='object')),errors='coerce',utc=True)
     for col in NUMERIC:
         if col not in audit: audit[col]=float('nan')
@@ -45,7 +48,7 @@ def load_files(folder,uploads):
 
 st.sidebar.header('Fonte e período')
 uploads=st.sidebar.file_uploader('Envie CSV(s) exportados pelo notebook v0.3',type='csv',accept_multiple_files=True)
-local_folder=Path(os.getenv('MARKET_HEALTH_DIR','data/market_health'))
+local_folder=Path(os.getenv('MARKET_HEALTH_DIR',str(Path(__file__).resolve().parent/'data'/'market_health')))
 st.sidebar.caption('Sem upload: tenta ler arquivos CSV da pasta data/market_health da implantação. O Drive privado não é acessado automaticamente.')
 try:
     audit=normalize(load_files(local_folder,uploads))
@@ -100,3 +103,4 @@ with st.expander('Auditoria e download'):
     st.dataframe(view.sort_values('date',ascending=False),hide_index=True)
     st.download_button('Baixar histórico filtrado',view.to_csv(index=False).encode('utf-8'),'market_health_web_export.csv','text/csv')
     st.dataframe(audit[['date','family','eligible','coverage_pct','score']].tail(30),hide_index=True)
+
